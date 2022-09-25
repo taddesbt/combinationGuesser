@@ -11,8 +11,55 @@ button.addEventListener("click", function () {
         gamePlay = true;
         score = 0;
         gameArea.innerHTML = "";
-        maker(6);
+        builder(6);
         message.innerHTML = "Guess the combo";
         button.innerHTML = "Check Combo";
+
+    }
+
+    else {
+        score++;
+        message.innerHTML = "Guesses " + score;
+        const numbers = document.querySelectorAll(".numb");
+        let winCondition = 0;
+        for (let i = 0; i < numbers.length; i++) {
+            if (numbers[i].value == numbers[i].correct) {
+                numbers[i].style.backgroundColor = "green";
+                numbers[i].style.color = "white";
+                winCondition++;
+            }
+            else {
+                let color = (numbers[i].value < numbers[i].correct) ? "blue" : "red";
+                numbers[i].style.backgroundColor = color;
+                numbers[i].style.color = "black";
+            }
+            if (winCondition == numbers.length) {
+                gameEND();
+            }
+        }
     }
 })
+
+
+function builder(num) {
+    for (let x = 0; x < num; x++) {
+        let el = document.createElement("input");
+        el.setAttribute("type", "number");
+        el.max = 9;
+        el.min = 0;
+        el.size = 1;
+        el.style.width = "50px";
+        el.classList.add("numb");
+        el.order = x;
+        el.correct = Math.floor(Math.random() * 10);
+        el.value = 0;
+        gameArea.appendChild(el);
+    }
+}
+
+
+function gameEND() {
+    message.innerHTML = "You solved the combo in  " + score + " guesses";
+    gamePlay = false;
+    button.innerHTML = "Restart Game";
+}
